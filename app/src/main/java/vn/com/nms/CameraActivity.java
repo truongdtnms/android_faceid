@@ -84,6 +84,7 @@ public final class CameraActivity extends AppCompatActivity {
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
         radioGroup = findViewById(R.id.radio_group);
+        option = OPTION.CHAMCONG;
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -127,21 +128,22 @@ public final class CameraActivity extends AppCompatActivity {
                 float scale = mBitmap.getWidth() / 480;
                 mBitmap = Bitmap.createScaledBitmap(mBitmap, 480, (int) (mBitmap.getHeight() / scale), true);
                 /* use for back camera */
-//                Matrix m = new Matrix();
-//                m.postRotate(90);
-//                mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), m, true);
+                Matrix m = new Matrix();
+                m.postRotate(90);
+                mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), m, true);
+
                 Frame frame = new Frame.Builder().setBitmap(mBitmap).build();
                 SparseArray<Face> faces = CameraActivity.mDetector.detect(frame);
 
                 if (faces.size() == 1) {
-//                    Face face = faces.valueAt(0);
-//                    int left = (int) face.getPosition().x;
-//                    int top = (int) face.getPosition().y;
-//                    try {
-//                        mBitmap = Bitmap.createBitmap(mBitmap, left, top, (int) face.getWidth(), (int) face.getHeight());
-//                    } catch (Exception e){
-//                        Toast.makeText(CameraActivity.this, "Bạn cần chụp đầy đủ khuôn mặt!", Toast.LENGTH_LONG).show();
-//                    }
+                    Face face = faces.valueAt(0);
+                    int left = (int) face.getPosition().x;
+                    int top = (int) face.getPosition().y;
+                    try {
+                        mBitmap = Bitmap.createBitmap(mBitmap, left, top, (int) face.getWidth(), (int) face.getHeight());
+                    } catch (Exception e){
+                        Toast.makeText(CameraActivity.this, "Bạn cần chụp đầy đủ khuôn mặt!", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Toast.makeText(CameraActivity.this, "Thử lại!", Toast.LENGTH_LONG).show();
                     dialogLoading.cancel();
@@ -151,16 +153,19 @@ public final class CameraActivity extends AppCompatActivity {
 //                ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //                mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 //                byte[] bytesImage = baos.toByteArray();
-
+//                Log.d("----------------", option.toString());
                 byte[] bytesImage = bytes;
                 if (option == OPTION.CHAMCONG) {
+                    Log.d("----------------", "cham cong");
                     APIChamCong api = new APIChamCong(CameraActivity.this, bytesImage, dialogLoading);
                     api.chamCong();
                     return;
                 } else if (option == OPTION.TRACUU) {
+                    Log.d("----------------", "tra cuu");
                     APITraCuu api = new APITraCuu(CameraActivity.this, bytesImage, "", "", dialogLoading);
                     api.traCuu();
                 } else if (option == OPTION.THEMANH){
+                    Log.d("----------------", "them anh");
                     dialogLoading.cancel();
                     DialogAddImage dialogAddImage = new DialogAddImage(CameraActivity.this, bytesImage);
                     dialogAddImage.show();

@@ -14,7 +14,7 @@ public class APIChamCong {
     private String data;
     private final String KEY_IMAGE = "image";
     public static final String API = "cham_cong";
-    private final String URL = "http://ec2-3-18-221-136.us-east-2.compute.amazonaws.com:5000/chamcong";
+    private final String URL = "http://192.168.88.213:8000/timekeeping/check";
 
     private DialogLoading dialogLoading;
     private Context context;
@@ -29,6 +29,7 @@ public class APIChamCong {
         JsonForm form = new JsonForm();
         form.setValue(KEY_IMAGE, stringImage);
         data = form.getJsonString();
+        Log.d("---------------", data);
         RequestAsyncTask asyncTask = new RequestAsyncTask(context);
         asyncTask.setDialogLoading(this.dialogLoading);
         asyncTask.execute(new String[]{URL, data, API});
