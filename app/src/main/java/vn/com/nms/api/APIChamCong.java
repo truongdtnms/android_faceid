@@ -14,7 +14,7 @@ public class APIChamCong {
     private String data;
     private final String KEY_IMAGE = "image";
     public static final String API = "cham_cong";
-    private final String URL = "http://192.168.88.213:8000/timekeeping/check";
+    private final String URL = "http://192.168.88.219:5000/faceid/api/v1.0/add_emp_log";
 
     private DialogLoading dialogLoading;
     private Context context;

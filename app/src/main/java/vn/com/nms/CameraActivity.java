@@ -128,9 +128,9 @@ public final class CameraActivity extends AppCompatActivity {
                 float scale = mBitmap.getWidth() / 480;
                 mBitmap = Bitmap.createScaledBitmap(mBitmap, 480, (int) (mBitmap.getHeight() / scale), true);
                 /* use for back camera */
-                Matrix m = new Matrix();
-                m.postRotate(90);
-                mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), m, true);
+//                Matrix m = new Matrix();
+//                m.postRotate(-90);
+//                mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), m, true);
 
                 Frame frame = new Frame.Builder().setBitmap(mBitmap).build();
                 SparseArray<Face> faces = CameraActivity.mDetector.detect(frame);
@@ -145,16 +145,17 @@ public final class CameraActivity extends AppCompatActivity {
                         Toast.makeText(CameraActivity.this, "Bạn cần chụp đầy đủ khuôn mặt!", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(CameraActivity.this, "Thử lại!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CameraActivity.this, "Thử lại!"+String.valueOf(faces.size()), Toast.LENGTH_LONG).show();
+                    Log.d("No_Face:", String.valueOf(faces.size()));
                     dialogLoading.cancel();
                     return;
                 }
 
-//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//                byte[] bytesImage = baos.toByteArray();
-//                Log.d("----------------", option.toString());
-                byte[] bytesImage = bytes;
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] bytesImage = baos.toByteArray();
+                Log.d("----------------", option.toString());
+//                byte[] bytesImage = bytes;
                 if (option == OPTION.CHAMCONG) {
                     Log.d("----------------", "cham cong");
                     APIChamCong api = new APIChamCong(CameraActivity.this, bytesImage, dialogLoading);
@@ -237,7 +238,7 @@ public final class CameraActivity extends AppCompatActivity {
 
         mCameraSource = new CameraSource.Builder(context, mDetector)
                 .setRequestedPreviewSize(640, 480)
-                .setFacing(CameraSource.CAMERA_FACING_BACK)
+                .setFacing(CameraSource.CAMERA_FACING_FRONT)
                 .setRequestedFps(15.0f)
                 .setAutoFocusEnabled(true)
                 .build();

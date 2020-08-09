@@ -54,7 +54,7 @@ public class RequestAsyncTask extends AsyncTask<String, JSONObject, JSONObject> 
                 this.dialogLoading.cancel();
             }
             Toast.makeText(context, "Không kết nối được server", Toast.LENGTH_LONG).show();
-            return;
+//            return;
         }
         if (this.dialogLoading != null) {
             dialogLoading.cancel();
